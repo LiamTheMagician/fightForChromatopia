@@ -1,2 +1,0 @@
-# fightForChromatopia
-Fight for Chromatopia
