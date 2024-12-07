@@ -1,24 +1,28 @@
 import sys, pygame as pg
 from pygame.locals import *
-
-SCREEN_SIZE = (1280, 720)
+from settings import *
+from debug import debug
 
 class Game:
     def __init__(self):
-        self.window = pg.display.set_mode(SCREEN_SIZE)
-        self.running = True
+        pg.init()
+        self.window = pg.display.set_mode((WIDTH, HEIGHT))
+        self.clock = pg.time.Clock()
 
     def handleEvents(self):
         for event in pg.event.get():
             if event.type == QUIT:
                 pg.quit()
                 sys.exit()
-                running = False
 
     def run(self):
-        running = True
-        while self.running:
+        while True:
             self.handleEvents()
-            
-game = Game()
-game.run()
+            self.window.fill("black")
+            debug('Hello :)')
+            pg.display.update()
+            self.clock.tick(FPS)
+
+if __name__ == '__main__':
+    game = Game()
+    game.run()
