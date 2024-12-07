@@ -24,6 +24,7 @@ class Game:
 
             self.window.fill("black")
             self.level.run()
+
             pg.display.update()
             self.clock.tick(FPS)
 
