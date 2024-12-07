@@ -3,6 +3,7 @@ from pygame.locals import *
 from settings import *
 from level import Level
 
+
 class Game:
     def __init__(self):
         pg.init()
