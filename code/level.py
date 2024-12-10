@@ -42,14 +42,15 @@ class Level:
                             randomGrassImage = choice(graphics['grass'])
                             Tile((x,y), [self.visibleSprites, self.obstacleSprites], 'grass', randomGrassImage)
                         if style == 'object':
-                            pass
+                            surf = graphics['objects'][int(col)]
+                            Tile((x,y), [self.visibleSprites, self.obstacleSprites], 'object', surf)
                 """
                 if col == 'x':
                     Tile((x, y), [self.visibleSprites, self.obstacleSprites])
                 if col == 'p':
                 """
 
-        self.player = Player((2000, 1430), [self.visibleSprites], self.obstacleSprites)
+        self.player = Player((2000, 1425), [self.visibleSprites], self.obstacleSprites)
 
     def run(self):
         self.visibleSprites._customDraw(self.player)

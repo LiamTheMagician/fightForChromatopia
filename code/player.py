@@ -11,6 +11,9 @@ class Player(pg.sprite.Sprite):
 
         self.direction = pg.math.Vector2()
         self.speed = 5
+        self.attacking = False
+        self.attack_cooldown = 400
+        self.attack_time = None
 
         self.obstacleSprites = obstacleSprites
 
@@ -31,6 +34,19 @@ class Player(pg.sprite.Sprite):
         else:
             self.direction.x = 0
 
+        # Attack Input
+        if keys[pg.K_SPACE] and not self.attacking:
+            self.attacking = True
+            self.attack_time = pg.time.get_ticks()
+            print("attack")
+
+        # Magic Input
+        if keys[pg.K_LCTRL] and not self.attacking:
+            self.attacking = True
+            self.attack_time = pg.time.get_ticks()
+            print("magic")
+
+
     def move(self,speed):
         if self.direction.magnitude() != 0:
             self.direction = self.direction.normalize()
@@ -40,6 +56,13 @@ class Player(pg.sprite.Sprite):
         self.hitbox.y += self.direction.y * speed
         self.collision('vertical')
         self.rect.center = self.hitbox.center
+
+    def cooldowns(self):
+        current_time = pg.time.get_ticks()
+
+        if self.attacking:
+            if current_time - self.attack_time >= self.attack_cooldown:
+                self.attacking = False
 
     def collision(self, direction):
         if direction == 'horizontal':
@@ -57,7 +80,8 @@ class Player(pg.sprite.Sprite):
                         self.hitbox.bottom = sprite.rect.top
                     if self.direction.y < 0:
                         self.hitbox.top = sprite.rect.bottom
-                    
+            
     def update(self):
         self.input()
+        self.cooldowns()
         self.move(self.speed)

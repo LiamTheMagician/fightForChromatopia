@@ -6,5 +6,8 @@ class Tile(pg.sprite.Sprite):
         super().__init__(groups)
         self.spriteType = spriteType
         self.image  = surface
-        self.rect   = self.image.get_rect(topleft = pos)
+        if self.spriteType == 'object':
+            self.rect = self.image.get_rect(topleft = (pos[0], pos[1] - TILESIZE))
+        else:
+            self.rect = self.image.get_rect(topleft = pos)
         self.hitbox = self.rect.inflate(0, -10)
