@@ -54,9 +54,9 @@ class Player(pygame.sprite.Sprite):
         self.rect.move_ip(self.vel.x, self.vel.y)
 
     def collisions(self):
-        if pygame.sprite.spritecollide(self, self.collision_list, False):
-            for object in self.collision_list:
-                print("flag")
+        if self.alignement == self.HORIZONTAL:
+            for objects in self.collision_list:
+                if self.rect.colliderect(objects.rect):
 
     def player_debug(self):
         text(str(self.direction), self.screen, (255,255,255), (0,0))
