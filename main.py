@@ -7,7 +7,10 @@ screen = pygame.display.set_mode((720,480))
 clock = pygame.time.Clock()
 
 o1 = Object((500,250))
-o_group = pygame.sprite.Group(o1)
+
+o2 = Object((150,250))
+
+o_group = pygame.sprite.Group(o1,o2)
 
 p1 = Player(3, o_group, screen)
 p_group = pygame.sprite.Group(p1)
