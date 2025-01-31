@@ -57,6 +57,14 @@ class Player(pygame.sprite.Sprite):
         if self.alignement == self.HORIZONTAL:
             for objects in self.collision_list:
                 if self.rect.colliderect(objects.rect):
+                    if self.direction.
+                        self.
+        
+        #si mvmnt vertical
+            #pour tous les obstacles
+                #si collision avec obstacle
+                    #si vient de la droite
+                        #la gauche du jouer = la droite de l'obstacle
 
     def player_debug(self):
         text(str(self.direction), self.screen, (255,255,255), (0,0))
