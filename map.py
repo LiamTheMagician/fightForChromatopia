@@ -1,13 +1,13 @@
 import pygame
-taillr_grille = 50
+from object import *
+
+TAILLE_GRILLE = 64
 #'O' = ouvert
 #'X' = fermé
-M=[['O', 'X', 'O'],
-   ['O', 'X', 'X'],
-   ['X', 'O', 'O'],
-   ['X', 'x', 'O'],
-   ['O', 'X', 'O'],
-   ['O', 'X', 'X'],
-   ['X', 'O', 'O'],
-   ['X', 'x', 'O'],
-]
+
+def matrice_ecran(mat,group):
+    for i in range(len(mat)):
+        for j in range(len(mat[i])):
+            if mat[i][j] == 'X':
+               o = Object((mat[j]*TAILLE_GRILLE, mat[i]*TAILLE_GRILLE))
+               group.add(o)
