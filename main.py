@@ -1,13 +1,24 @@
 import pygame
 from player import *
+from map import *
 from object import *
 
 pygame.init()
 screen = pygame.display.set_mode((720,480))
 clock = pygame.time.Clock()
 
-o1 = Object((500,250))
-o_group = pygame.sprite.Group(o1)
+M=[['O', 'X', 'O'],
+   ['O', 'X', 'X'],
+   ['X', 'O', 'O'],
+   ['X', 'X', 'O'],
+   ['O', 'X', 'O'],
+   ['O', 'X', 'X'],
+   ['X', 'O', 'O'],
+   ['X', 'X', 'O'],
+]
+
+o_group = pygame.sprite.Group()
+matrice_ecran(M, o_group)
 
 p1 = Player(3, o_group, screen)
 p_group = pygame.sprite.Group(p1)
