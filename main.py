@@ -32,11 +32,12 @@ while True:
     screen.fill((50,50,50))
     
     #Draw
-    p_group.draw(screen)
-    p_group.update()
-
     o_group.draw(screen)
     o_group.update()
+
+    p_group.draw(screen)
+    p_group.update()
+    
     pygame.display.flip()
     
     clock.tick(60)

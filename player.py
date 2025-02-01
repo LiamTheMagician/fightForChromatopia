@@ -81,4 +81,4 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.movement()
-        #self.player_debug()
+        self.player_debug()
