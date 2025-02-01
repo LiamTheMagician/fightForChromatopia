@@ -18,7 +18,7 @@ M=[['O', 'X', 'O'],
 ]
 
 o_group = pygame.sprite.Group()
-matrice_ecran(M, o_group)
+# matrice_ecran(M, o_group)
 
 p1 = Player(3, o_group, screen)
 p_group = pygame.sprite.Group(p1)
