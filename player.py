@@ -36,7 +36,6 @@ class Player(pygame.sprite.Sprite):
             self.alignement = self.VERTICAL
         else:
             self.direction.y = 0
-            self.alignement = self.EMPTY
 
         if keys[K_LEFT]:
             self.direction.x = -1
@@ -46,25 +45,35 @@ class Player(pygame.sprite.Sprite):
             self.alignement = self.HORIZONTAL
         else:
             self.direction.x = 0
-            self.alignement = self.EMPTY
             
         if self.direction.length() >= 1:
             self.direction.normalize_ip() 
         self.vel = self.direction * self.acceleration
-        self.rect.move_ip(self.vel.x, self.vel.y)
 
-    def collisions(self):
-        if self.alignement == self.HORIZONTAL:
-            for objects in self.collision_list:
-                if self.rect.colliderect(objects.rect):
-                    if self.direction.
-                        self.
+        self.rect.x += self.direction.x * self.acceleration
+        self.collisions(self.HORIZONTAL)
+        self.rect.y += self.direction.y * self.acceleration
+        self.collisions(self.VERTICAL)
         
-        #si mvmnt vertical
-            #pour tous les obstacles
-                #si collision avec obstacle
-                    #si vient de la droite
-                        #la gauche du jouer = la droite de l'obstacle
+    def collisions(self, alignement):
+        
+        if alignement == self.HORIZONTAL:
+            for sprite in self.collision_list:
+                if sprite.rect.colliderect(self.rect):
+                    if self.direction.x > 0: # moving right
+                        self.rect.right = sprite.rect.left
+                        print("left")
+                    if self.direction.x < 0: # moving left
+                        self.rect.left = sprite.rect.right
+                        print("right")
+        
+        if alignement == self.VERTICAL:
+            for sprite in self.collision_list:
+                if sprite.rect.colliderect(self.rect):
+                    if self.direction.y > 0: # Moving down
+                        self.rect.bottom = sprite.rect.top
+                    if self.direction.y < 0:
+                        self.rect.top = sprite.rect.bottom
 
     def player_debug(self):
         text(str(self.direction), self.screen, (255,255,255), (0,0))
@@ -72,5 +81,4 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.movement()
-        self.collisions()
         #self.player_debug()
