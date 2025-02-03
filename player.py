@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         #Player Parameters
         self.image = pygame.image.load('art/player.png').convert_alpha()
-        self.rect  = self.image.get_rect()
+        self.rect  = self.image.get_rect(topleft = (50,50))
         self.pos   = self.rect.center
         self.vel   = pygame.math.Vector2()
         self.acceleration = speed

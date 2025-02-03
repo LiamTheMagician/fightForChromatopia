@@ -7,18 +7,20 @@ pygame.init()
 screen = pygame.display.set_mode((720,480))
 clock = pygame.time.Clock()
 
-M=[['O', 'X', 'O'],
-   ['O', 'X', 'X'],
-   ['X', 'O', 'O'],
-   ['X', 'X', 'O'],
-   ['O', 'X', 'O'],
-   ['O', 'X', 'X'],
-   ['X', 'O', 'O'],
-   ['X', 'X', 'O'],
-]
+M =[['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
+    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
+    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
+    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
+    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
+    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
+    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
+    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
+    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
+    ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']]
+
 
 o_group = pygame.sprite.Group()
-matrice_ecran(M, o_group)
+object_mapping(M, o_group)
 
 p1 = Player(3, o_group, screen)
 p_group = pygame.sprite.Group(p1)
@@ -37,7 +39,7 @@ while True:
 
     p_group.draw(screen)
     p_group.update()
-    
+
     pygame.display.flip()
     
     clock.tick(60)
