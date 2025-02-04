@@ -9,5 +9,5 @@ def matrice_ecran(mat,group):
     for i in range(len(mat)):
         for j in range(len(mat[i])):
             if mat[i][j] == 'X':
-               o = Object((mat[j]*TAILLE_GRILLE, mat[i]*TAILLE_GRILLE))
+               o = Object((j*TAILLE_GRILLE, i*TAILLE_GRILLE))
                group.add(o)

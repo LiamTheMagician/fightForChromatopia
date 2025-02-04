@@ -8,7 +8,6 @@ fenetre = pygame.display.set_mode((640,480))
 inventaire = pygame.Rect(200,120,50,50)
 pygame.draw.rect(fenetre,(50,50,50),inventaire)
 
-
 continuer = True
 while continuer:
     for event in pygame.event.get():
