@@ -79,6 +79,7 @@ class Player(pygame.sprite.Sprite):
         #text(str(self.direction.length()), self.screen, (255,255,255), (0,100))
 
     def npc_interact(self):
+        pass
 
     def update(self):
         self.movement()
