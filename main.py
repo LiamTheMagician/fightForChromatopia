@@ -1,31 +1,13 @@
 import pygame
 from player import *
+from map    import *
 from object import *
 
 pygame.init()
 screen = pygame.display.set_mode((720,480))
 clock = pygame.time.Clock()
 
-M =[['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X'],
-    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
-    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
-    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
-    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
-    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
-    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
-    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
-    ['X', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'],
-    ['X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X']]
-
-o_group = pygame.sprite.Group()
-
-for i in range(len(M)):
-            for j in range(len(M[i])):
-                if M[i][j] == 'X':
-                    o = Object((j*50, i*50))
-                    o_group.add(o)
-
-p1 = Player(3, o_group, screen)
+p1 = Player(3, [], screen)
 p_group = pygame.sprite.Group(p1)
 
 while True:
@@ -37,9 +19,6 @@ while True:
     screen.fill((50,50,50))
     
     #Draw
-    o_group.draw(screen)
-    o_group.update()
-
     p_group.draw(screen)
     p_group.update()
 

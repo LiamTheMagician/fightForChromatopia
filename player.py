@@ -61,10 +61,8 @@ class Player(pygame.sprite.Sprite):
                 if sprite.rect.colliderect(self.rect):
                     if self.direction.x > 0: # moving right
                         self.rect.right = sprite.rect.left
-                        print("left")
                     if self.direction.x < 0: # moving left
                         self.rect.left = sprite.rect.right
-                        print("right")
         
         if alignement == self.VERTICAL:
             for sprite in self.collision_list:
@@ -75,8 +73,9 @@ class Player(pygame.sprite.Sprite):
                         self.rect.top = sprite.rect.bottom
 
     def player_debug(self):
-        text(str(self.direction), self.screen, (255,255,255), (0,0))
-        text(str(self.direction.length()), self.screen, (255,255,255), (0,100))
+        pass
+        #text(str(self.direction), self.screen, (255,255,255), (0,0))
+        #text(str(self.direction.length()), self.screen, (255,255,255), (0,100))
 
     def update(self):
         self.movement()
