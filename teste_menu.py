@@ -19,9 +19,12 @@ while continuer:
         
         if event.type == KEYDOWN:
             if event.key == K_m:
-                inventair.topleft = (300, 220)
+                if inventair.x == 200 and inventair.y == 120:
+                    inventair.move_ip(100, 100)
+                elif inventair.x == 300 and inventair.y == 220:
+                    inventair.move_ip(-100, -100)
 
-
+    fenetre.fill((0, 0, 0))
     pygame.draw.rect(fenetre,(50, 50, 50),inventair)
     pygame.display.flip()
 
