@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from object import *
+from annimation import *
 
 
 pygame.init()
@@ -20,9 +20,13 @@ while continuer:
         if event.type == KEYDOWN:
             if event.key == K_m:
                 if inventair.x == 200 and inventair.y == 120:
-                    inventair.move_ip(100, 100)
+                    #inventair.move_ip(100, 100)
+                    deplacement(inventair, 100, 100)
+                    taille(inventair, 100, 100)
                 elif inventair.x == 300 and inventair.y == 220:
-                    inventair.move_ip(-100, -100)
+                    #inventair.move_ip(-100, -100)
+                    deplacement(inventair, -100, -100)
+                    taille(inventair, 50, 50)
 
     fenetre.fill((0, 0, 0))
     pygame.draw.rect(fenetre,(50, 50, 50),inventair)
