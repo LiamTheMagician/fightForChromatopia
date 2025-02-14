@@ -48,11 +48,11 @@ class Player(pygame.sprite.Sprite):
             
         if self.direction.length() >= 1:
             self.direction.normalize_ip() 
-        self.vel = self.direction * self.acceleration
+        self.vel = self.direction * self.acceleration * self.dt
 
-        self.rect.x += self.direction.x * self.acceleration
+        self.rect.x += self.direction.x * self.acceleration * self.dt
         self.collisions(self.HORIZONTAL)
-        self.rect.y += self.direction.y * self.acceleration
+        self.rect.y += self.direction.y * self.acceleration * self.dt
         self.collisions(self.VERTICAL)
         
     def collisions(self, alignement):
@@ -74,8 +74,6 @@ class Player(pygame.sprite.Sprite):
 
     def player_debug(self):
         pass
-        #text(str(self.direction), self.screen, (255,255,255), (0,0))
-        #text(str(self.direction.length()), self.screen, (255,255,255), (0,100))
 
     def update(self):
         self.movement()

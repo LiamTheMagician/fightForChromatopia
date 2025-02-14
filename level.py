@@ -13,7 +13,7 @@ class Level():
         self.obstacles = []
         self.players = []
         self.group = pygame.sprite.Group()
-        self.surf = pygame.display.get_surface()
+        self.screen = pygame.display.get_surface()
 
         with open(matrix_path, 'r') as csvfile:
             reader = csv.reader(csvfile)
@@ -26,11 +26,11 @@ class Level():
                     o = Tile((j*GRID_SIZE, i*GRID_SIZE))
                     self.obstacles.append(o)
                 if self.matrix[i][j] == 'P':
-                    p = Player(5, self.obstacles, self.surf)
+                    p = Player(5, self.obstacles, self.screen)
                     self.players.append(p)
         self.group.add(self.obstacles, self.players)
         
     def level_run(self):
         self.group.update()
-        self.group.draw(self.surf)
+        self.group.draw(self.screen)
         
