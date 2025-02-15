@@ -8,7 +8,7 @@ class Player(pygame.sprite.Sprite):
         #Player Parameters
         self.image = pygame.image.load('art/player.png').convert_alpha()
         self.rect  = self.image.get_rect(topleft = (50,50))
-        self.pos   = self.rect.center
+        self.pos   = pygame.math.Vector2(self.rect.topleft)
         self.vel   = pygame.math.Vector2()
         self.acceleration = speed
         self.direction    = pygame.math.Vector2()
@@ -24,7 +24,7 @@ class Player(pygame.sprite.Sprite):
         #Display
         self.screen = screen
 
-    def movement(self):
+    def movement(self,dt):
         keys = pygame.key.get_pressed()
         self.alignement = ""
 
@@ -48,11 +48,14 @@ class Player(pygame.sprite.Sprite):
             
         if self.direction.length() >= 1:
             self.direction.normalize_ip() 
-        self.vel = self.direction * self.acceleration * self.dt
 
-        self.rect.x += self.direction.x * self.acceleration * self.dt
+
+        self.pos.x += self.direction.x * self.acceleration * dt
+        self.pos.y += self.direction.y * self.acceleration * dt
+
+        self.rect.x = self.pos.x
         self.collisions(self.HORIZONTAL)
-        self.rect.y += self.direction.y * self.acceleration * self.dt
+        self.rect.y = self.pos.y
         self.collisions(self.VERTICAL)
         
     def collisions(self, alignement):
@@ -75,6 +78,5 @@ class Player(pygame.sprite.Sprite):
     def player_debug(self):
         pass
 
-    def update(self):
-        self.movement()
-        self.player_debug()
+    def update(self, dt):
+        self.movement(dt)

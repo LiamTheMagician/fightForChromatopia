@@ -19,18 +19,18 @@ class Level():
             reader = csv.reader(csvfile)
             self.matrix = [row for row in reader]
 
-    def tile_mapping(self):
+    def tile_mapping(self, player_speed):
         for i in range(len(self.matrix)):
             for j in range(len(self.matrix[i])):
                 if self.matrix[i][j] == 'X':
                     o = Tile((j*GRID_SIZE, i*GRID_SIZE))
                     self.obstacles.append(o)
                 if self.matrix[i][j] == 'P':
-                    p = Player(5, self.obstacles, self.screen)
+                    p = Player(player_speed, self.obstacles, self.screen)
                     self.players.append(p)
         self.group.add(self.obstacles, self.players)
         
-    def level_run(self):
-        self.group.update()
+    def level_run(self, dt):
+        self.group.update(dt)
         self.group.draw(self.screen)
         
