@@ -26,7 +26,6 @@ while True:
     g_button.draw(screen)
     g_button.update()
     pygame.display.flip()
-    clock.tick(60)
     
 
 pygame.quit()

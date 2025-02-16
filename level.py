@@ -26,7 +26,7 @@ class Level():
                     o = Tile((j*GRID_SIZE, i*GRID_SIZE))
                     self.obstacles.append(o)
                 if self.matrix[i][j] == 'P':
-                    p = Player(player_speed, self.obstacles, self.screen)
+                    p = Player(player_speed, (j*GRID_SIZE,i*GRID_SIZE),self.obstacles, self.screen)
                     self.players.append(p)
         self.group.add(self.obstacles, self.players)
         

@@ -9,7 +9,7 @@ class Text(pygame.sprite.Sprite):
         self.string = string
         self.font   = pygame.font.SysFont('Comic Sans MS', 30)
         self.image = self.font.render(self.string, False, color)
-        self.rect  = self.image.get_rect(topleft = (pos))
+        self.rect  = self.image.get_frect(topleft = (pos))
 
     def move(self, final_pos, time):
         self.movex = lerp_single(self.rect.x, final_pos[0], time)
