@@ -57,7 +57,6 @@ class Player(pygame.sprite.Sprite):
         self.collisions(self.VERTICAL)
 
     def collisions(self, alignement):
-        
         if alignement == self.HORIZONTAL:
             for sprite in self.collision_list:
                 if sprite.rect.colliderect(self.rect):

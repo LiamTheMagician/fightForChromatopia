@@ -12,7 +12,7 @@ clock = pygame.time.Clock()
 prev_time = framerate.time()
 
 l1 = Level('map/map1.csv')
-l1.tile_mapping(500)
+l1.tile_mapping(300)
 
 while True:
     dt = framerate.time() - prev_time

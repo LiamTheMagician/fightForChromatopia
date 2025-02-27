@@ -34,5 +34,6 @@ def example(rect):
     t = normalize(math.sin(current_time / 100), -1, 1)
     rect.x = lerp_single(rect.x, 400, 0.1)
 
-
-
+def distance(pos1 = (0,0), pos2 = (0,0)):
+    from math import sqrt
+    return sqrt((pos1[0]-pos2[0])**2 + (pos1[1]-pos2[1])**2)
