@@ -1,5 +1,3 @@
-from pygame import time
-
 def lerp_single(a: int, b:int , t: float) -> float:
     """lerp_single(a, b, t)\n
     a: position de départ\n
@@ -9,17 +7,17 @@ def lerp_single(a: int, b:int , t: float) -> float:
     lerp_single single renvoie une valeur entre a et b en fonction de t"""
     return a + (b - a) * t
 
-def normalize(x: float, min_value: int, max_value: int):
+def normalize(x: float, min_value: float, max_value: float, min_range: float = 0.0, max_range: float = 1.0):
     """normalize(a, b, t)
     x: valeur à normaliser
     min_value: valeur minimale possible
     max_value: valeur maximale possible
     
     normalise la valeur d'entrée entre 0 et 1 c'est à dire trouver un quotient d'une valeur sur une valeur maximale choisie"""
-    return (x - min_value) / (max_value - min_value)
-
-def delta_time(prev_time):
-    return (time.get_ticks() - prev_time) / 1000
+    if min_range == 0.0 and max_range == 1.0:
+        return (x - min_value) / (max_value - min_value)
+    else:
+        return ((x - min_value) / (max_value - min_value)) * (max_range - min_range) + min_range
 
 def example(rect):
     """
