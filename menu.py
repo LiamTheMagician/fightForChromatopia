@@ -4,7 +4,7 @@ import time as framerate
 from pygame.locals import *
 from game_math     import *
 from text          import *
-from button        import *
+from menu_items    import *
 
 pygame.init()
 screen = pygame.display.set_mode((720,480))
@@ -12,17 +12,10 @@ clock = pygame.time.Clock()
 
 prev_time = framerate.time()
 
-wallpaper_img  = pygame.image.load("art/wallpaper.png")
-wallpaper_rect = wallpaper_img.get_rect(center = (screen.width/2,screen.height/2))
+wallpaper = Background((0,0), "art/wallpaper.png")
+wp_group  = pygame.sprite.Group(wallpaper)
 
-def parralax(bg_rect, dt):
-    mouse_x = normalize(pygame.mouse.get_pos()[0], 0, screen.width, 0.0, 1.0)
-    mouse_y = normalize(pygame.mouse.get_pos()[1], 0, screen.height, 0.0, 1.0)
-
-    bg_rect.centerx = lerp_single(bg_rect.centerx, mouse_trunc, mouse_x)
-    print(mouse_trunc)
-
-button = Button((720/2, 480/2))
+button = Button((120,120,120), (0,0,0), (255, 255, 255), (screen.width - 210, 480/2), (200, 50))
 g_button = pygame.sprite.Group(button)
 
 def event_handler():
@@ -38,8 +31,12 @@ while True:
     event_handler()
     screen.fill((50,50,50))
 
-    parralax(wallpaper_rect, dt)
-    screen.blit(wallpaper_img, wallpaper_rect)
+    wp_group.update(True)
+    g_button.update(dt)
+
+    wp_group.draw(screen)
+    g_button.draw(screen)
+
     pygame.display.flip()
     
 
