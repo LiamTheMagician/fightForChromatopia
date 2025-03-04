@@ -1,6 +1,8 @@
 import pygame
 from pygame.locals import *
 from text import *
+from animation import *
+from npc import *
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, speed, collision_list, screen):
@@ -79,7 +81,9 @@ class Player(pygame.sprite.Sprite):
         #text(str(self.direction.length()), self.screen, (255,255,255), (0,100))
 
     def npc_interact(self):
-        pass
+        if distance(self.pos, NPC.pos) <= 10:
+            print("interact")
+
 
     def update(self):
         self.movement()

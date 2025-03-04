@@ -8,6 +8,7 @@ class NPC(pygame.sprite.Sprite):
         #Player Parameters
         self.image = pygame.image.load('art/npc.png').convert_alpha()
         self.rect  = self.image.get_rect(topleft = (50,50))
+        self.rect = self.rect.center
 
     
 
