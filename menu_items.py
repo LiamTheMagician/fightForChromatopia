@@ -8,6 +8,7 @@ class Button(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=position)
 
         self.delay = 0.2
+        self.click_delay = 0.5
 
         self.init_color = init_color
         self.hover = hover_color
@@ -16,16 +17,19 @@ class Button(pygame.sprite.Sprite):
     def color(self, delta_time):
         click = pygame.mouse.get_pressed(3)
         if self.delay >= 0:
-            print(self.delay)
             self.image.fill(self.init_color)
             self.delay -= 1 * delta_time
 
-        elif self.rect.collidepoint(pygame.mouse.get_pos()) and self.delay  <= 0:
+        elif self.rect.collidepoint(pygame.mouse.get_pos()) and self.delay  <= 0.1:
             self.image.fill(self.hover)
             if click[0]:
-                self.image.fill(self.click)
-                self.delay = 0.2
-
+                while self.click_delay >= 0:
+                    self.click_delay -= 0.01
+                    self.image.fill(self.click)
+                    print(self.click_delay)
+                self.click_delay = 0.5
+                self.delay = 2
+                
         else:
             self.image.fill(self.init_color)
             
@@ -41,8 +45,8 @@ class Background(pygame.sprite.Sprite):
         self.screen = pygame.display.get_surface()
 
     def parallax(self):
-        mouse_x = normalize(pygame.mouse.get_pos()[0], 0, self.screen.width,  0.45, 0.55)
-        mouse_y = normalize(pygame.mouse.get_pos()[1], 0, self.screen.height, 0.45, 0.55)
+        mouse_x = normalize(pygame.mouse.get_pos()[0], 0, self.screen.width,  0.48, 0.52)
+        mouse_y = normalize(pygame.mouse.get_pos()[1], 0, self.screen.height, 0.48, 0.52)
 
         self.rect.centerx = -mouse_x * self.screen.width + self.screen.width
         self.rect.centery = -mouse_y * self.screen.height + self.screen.height
