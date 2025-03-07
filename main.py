@@ -8,10 +8,9 @@ screen = pygame.display.set_mode((720,480))
 
 game_run = False
 menu_run = True
-confirmed = False
 
 main_menu_buttons = [
-    Button(position=(720 - 210, 480 - 300), size=(200, 50))
+    Button(position=(720/2, 480/2), size=(200, 50))
 ]
 
 class Game():
@@ -39,13 +38,12 @@ class Game():
 main_game = Game()
 main_menu = Menu("art/wallpaper.png", main_menu_buttons)
 
-i = 0
 while True:
-    if main_menu.get_button(0) and game_run == False:
-        i+=1
-        print(f'{i} clicked')
-        game_run = True
+    print(menu_run)
     if game_run:
         main_game.run_game()
     if menu_run and game_run == False:
         main_menu.run_menu()
+        if main_menu.get_button(0) and game_run == False:
+            game_run = True
+            menu_run = False

@@ -11,9 +11,9 @@ class Button(pygame.sprite.Sprite):
         self.prev_time = framerate.time()
 
         self.image = pygame.Surface(size)
-        self.rect  = self.image.get_rect(topleft=position)
+        self.rect  = self.image.get_rect(center=position)
         
-        self.delay   = 0.0
+        self.delay   = 0.2
         self.clicked = False
 
         self.init_color  = init_color
