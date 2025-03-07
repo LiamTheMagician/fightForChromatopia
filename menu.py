@@ -4,41 +4,40 @@ import time as framerate
 from pygame.locals import *
 from game_math     import *
 from text          import *
-from menu_items    import *
+from menu_items    import Background
 
-pygame.init()
-screen = pygame.display.set_mode((720,480))
-clock = pygame.time.Clock()
+class Menu():
+    def __init__(self, image_path = 'art/wallpaper.png', button_list = []):
+        pygame.init()
+        self.screen = pygame.display.get_surface()
 
-prev_time = framerate.time()
+        self.wallpaper   = Background((0,0), image_path)
+        self.button_list = button_list
 
-wallpaper = Background((0,0), "art/wallpaper.png")
-wp_group  = pygame.sprite.Group(wallpaper)
+        self.g_wallpaper = pygame.sprite.Group(self.wallpaper)
+        self.g_buttons   = pygame.sprite.Group(self.button_list)
 
-button = Button((120,120,120), (0,0,0), (255, 255, 255), (screen.width - 210, 480/2), (200, 50))
-g_button = pygame.sprite.Group(button)
+        self.prev_time = framerate.time()
 
-def event_handler():
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
+    def get_button(self, button_index):
+        if self.g_buttons.sprites()[button_index].get_clicked():
+            return True
+        return False
 
-while True:
-    dt = framerate.time() - prev_time
-    prev_time = framerate.time()
+    def run_menu(self):
+        dt = framerate.time() - self.prev_time
+        self.prev_time = framerate.time()
 
-    event_handler()
-    screen.fill((50,50,50))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
 
-    wp_group.update(True)
-    g_button.update(dt)
+        self.screen.fill((50,50,50))
 
-    wp_group.draw(screen)
-    g_button.draw(screen)
+        self.g_wallpaper.update(True)
+        self.g_buttons.update(dt)
 
-    pygame.display.flip()
-    
+        self.g_wallpaper.draw(self.screen)
+        self.g_buttons.draw(self.screen)
 
-pygame.quit()
-exit()
+        pygame.display.flip()

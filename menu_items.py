@@ -1,39 +1,51 @@
 import pygame
 from game_math import *
+from level     import *
+import time as framerate
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, init_color, hover_color, click_color,position, size = (50,50)):
+    def __init__(self, init_color = (120,120,120), hover_color = (0,0,0), click_color = (255,255,255), position = (0,0), size = (50,50)):
         super().__init__()
+
+        self.screen = pygame.display.get_surface()
+        self.prev_time = framerate.time()
+
         self.image = pygame.Surface(size)
-        self.rect = self.image.get_rect(topleft=position)
+        self.rect  = self.image.get_rect(topleft=position)
+        
+        self.delay   = 0.0
+        self.clicked = False
 
-        self.delay = 0.2
-        self.click_delay = 0.5
+        self.init_color  = init_color
+        self.hover_color = hover_color
+        self.click_color = click_color
 
-        self.init_color = init_color
-        self.hover = hover_color
-        self.click = click_color
-
-    def color(self, delta_time):
+    def color(self, dt):
         click = pygame.mouse.get_pressed(3)
-        if self.delay >= 0:
-            self.image.fill(self.init_color)
-            self.delay -= 1 * delta_time
 
-        elif self.rect.collidepoint(pygame.mouse.get_pos()) and self.delay  <= 0.1:
-            self.image.fill(self.hover)
-            if click[0]:
-                while self.click_delay >= 0:
-                    self.click_delay -= 0.01
-                    self.image.fill(self.click)
-                    print(self.click_delay)
-                self.click_delay = 0.5
-                self.delay = 2
-                
-        else:
-            self.image.fill(self.init_color)
+        self.image.fill(self.init_color)
+        if click[0]:
+            if self.rect.collidepoint(pygame.mouse.get_pos()):
+                self.image.fill(self.click_color)
+                self.delay = 0.5
+                self.clicked = True
+
+        elif not click[0]:
+            if self.rect.collidepoint(pygame.mouse.get_pos()):
+                self.image.fill(self.hover_color)
+        
+        if self.delay > 0.0:
+            self.delay -= 1*dt
+
+        elif self.delay == 0.0 and self.clicked:
+            self.delay = 0.5
+            self.clicked = False
+
+    def get_clicked(self):
+        if self.clicked:
+            return True
+        return False
             
-
     def update(self, delta_time):
         self.color(delta_time)
 
