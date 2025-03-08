@@ -42,6 +42,9 @@ class CameraGroup(pygame.sprite.Group):
         self.screen = pygame.display.get_surface()
         self.offset = pygame.math.Vector2()
 
+        self.leftbox  = pygame.FRect(0, 0, self.screen.width/3, self.screen.height)
+        self.rightbox = pygame.FRect(self.screen.width - self.screen.width/3, 0, self.screen.width/3, self.screen.height)
+
     def custom_draw(self, player):
         self.offset.x = player.rect.centerx - self.screen.width/2
         self.offset.y = player.rect.centery - self.screen.height/2
@@ -50,3 +53,6 @@ class CameraGroup(pygame.sprite.Group):
             offset_rect = sprite.rect.copy()
             offset_rect.center -= self.offset
             self.screen.blit(sprite.image, offset_rect)
+
+        pygame.draw.rect(self.screen, (120,20,20), self.leftbox)
+        pygame.draw.rect(self.screen, (120,20,20), self.rightbox)

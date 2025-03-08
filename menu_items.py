@@ -13,7 +13,7 @@ class Button(pygame.sprite.Sprite):
         self.image = pygame.Surface(size)
         self.rect  = self.image.get_rect(center=position)
         
-        self.delay   = 0.2
+        self.delay   = 0.5
         self.clicked = False
 
         self.init_color  = init_color
@@ -24,25 +24,27 @@ class Button(pygame.sprite.Sprite):
         click = pygame.mouse.get_pressed(3)
 
         self.image.fill(self.init_color)
+
         if click[0]:
             if self.rect.collidepoint(pygame.mouse.get_pos()):
                 self.image.fill(self.click_color)
-                self.delay = 0.5
+
+        if click[0] and self.delay <= 0.0:
+            if self.rect.collidepoint(pygame.mouse.get_pos()):
+                self.image.fill(self.click_color)
                 self.clicked = True
 
         elif not click[0]:
             if self.rect.collidepoint(pygame.mouse.get_pos()):
                 self.image.fill(self.hover_color)
         
-        if self.delay > 0.0:
+        if self.delay >= 0.0:
             self.delay -= 1*dt
-
-        elif self.delay == 0.0 and self.clicked:
-            self.delay = 0.5
-            self.clicked = False
 
     def get_clicked(self):
         if self.clicked:
+            self.clicked = False
+            self.delay = 0.5
             return True
         return False
             
