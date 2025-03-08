@@ -14,11 +14,11 @@ main_menu_buttons = [
 ]
 
 class Game():
-    def __init__(self):
+    def __init__(self, level_path):
         pygame.init()
         self.prev_time = framerate.time()
 
-        self.level = Level("map/map1.csv")
+        self.level = Level(level_path)
         self.level.tile_mapping(300)
 
     def run_game(self):
@@ -35,11 +35,10 @@ class Game():
         self.level.level_run(dt)
         pygame.display.flip()
 
-main_game = Game()
+main_game = Game("map/map1.csv")
 main_menu = Menu("art/wallpaper.png", main_menu_buttons)
 
 while True:
-    print(menu_run)
     if game_run:
         main_game.run_game()
     if menu_run and game_run == False:

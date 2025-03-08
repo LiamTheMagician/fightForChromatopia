@@ -2,6 +2,7 @@ import pygame
 import csv
 from player import *
 from tile import *
+from game_math import *
 
 GRID_SIZE = 50
 #'O' = ouvert
@@ -12,7 +13,7 @@ class Level():
         self.matrix = []
         self.obstacles = []
         self.players = []
-        self.group = pygame.sprite.Group()
+        self.group = CameraGroup()
         self.screen = pygame.display.get_surface()
 
         with open(matrix_path, 'r') as csvfile:
@@ -26,11 +27,26 @@ class Level():
                     o = Tile((j*GRID_SIZE, i*GRID_SIZE))
                     self.obstacles.append(o)
                 if self.matrix[i][j] == 'P':
-                    p = Player(player_speed, (j*GRID_SIZE,i*GRID_SIZE),self.obstacles, self.screen)
-                    self.players.append(p)
+                    self.p = Player(player_speed, (j*GRID_SIZE,i*GRID_SIZE),self.obstacles, self.screen)
+                    self.players.append(self.p)
         self.group.add(self.obstacles, self.players)
         
     def level_run(self, dt):
         self.group.update(dt)
-        self.group.draw(self.screen)
-        
+        self.group.custom_draw(self.p)
+
+
+class CameraGroup(pygame.sprite.Group):
+    def __init__(self):
+        super().__init__()
+        self.screen = pygame.display.get_surface()
+        self.offset = pygame.math.Vector2()
+
+    def custom_draw(self, player):
+        self.offset.x = player.rect.centerx - self.screen.width/2
+        self.offset.y = player.rect.centery - self.screen.height/2
+
+        for sprite in self.sprites():
+            offset_rect = sprite.rect.copy()
+            offset_rect.center -= self.offset
+            self.screen.blit(sprite.image, offset_rect)
