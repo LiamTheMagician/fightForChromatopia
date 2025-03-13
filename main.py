@@ -1,10 +1,9 @@
 import pygame
-from player import *
-from map    import *
-from object import *
-from animation import *
-from npc import *
-pygame.init()
+import time as framerate
+from level import *
+from menu import *
+from menu_items import *
+
 screen = pygame.display.set_mode((720,480))
 
 game_run = False
@@ -16,11 +15,11 @@ main_menu_buttons = [
 ]
 
 class Game():
-    def __init__(self, chemin_niveau):
+    def __init__(self, level_path):
         pygame.init()
         self.prev_time = framerate.time()
 
-        self.level = Level(chemin_niveau)
+        self.level = Level(level_path)
         self.level.tile_mapping(300)
 
     def run_game(self):
