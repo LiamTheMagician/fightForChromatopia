@@ -2,10 +2,20 @@ import pygame
 from pygame.locals import *
 from game_math     import *
 
-def text(string, color, pos):
-    screen = pygame.display.get_surface()
-    string = string
-    font   = pygame.font.SysFont('Comic Sans MS', 30)
-    image  = font.render(string, False, color)
-    rect   = image.get_frect(topleft = (pos))
-    screen.blit(image, rect)
+class Text(pygame.sprite.Sprite):
+    def __init__(self, string, screen, color, pos):
+        super().__init__()
+        pygame.font.init()
+        self.string = string
+        self.font   = pygame.font.SysFont('Comic Sans MS', 30)
+        self.image = self.font.render(self.string, False, color)
+        self.rect  = self.image.get_frect(topleft = (pos))
+
+    def move(self, final_pos, time):
+        self.movex = lerp_single(self.rect.x, final_pos[0], time)
+        self.movey = lerp_single(self.rect.y, final_pos[1], time)
+        self.rect.x = round(self.movex)
+        self.rect.y = round(self.movey)
+
+    def color(self, new_color):
+        self.image = self.font.render(self.string, False, new_color)

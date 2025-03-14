@@ -1,9 +1,8 @@
 import pygame
 import csv
+from player import *
+from tile import *
 from game_math import *
-from player    import *
-from tile      import *
-
 
 GRID_SIZE = 50
 #'O' = ouvert
@@ -30,7 +29,7 @@ class Level():
                 if self.matrix[i][j] == 'P':
                     self.p = Player(player_speed, (j*GRID_SIZE,i*GRID_SIZE),self.obstacles, self.screen)
                     self.players.append(self.p)
-        self.group.add(self.players, self.obstacles)
+        self.group.add(self.obstacles, self.players)
         
     def level_run(self, dt):
         self.group.update(dt)
@@ -40,46 +39,20 @@ class Level():
 class CameraGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
-        import math
-
         self.screen = pygame.display.get_surface()
         self.offset = pygame.math.Vector2()
 
-        self.bounding_box = [
-            300, #Left and Right
-            150, #Top  and Bottom
-        ]
-        left   = self.bounding_box[0]
-        top    = self.bounding_box[1]
-        width  = self.screen.width  - (self.bounding_box[0]*2) #Because left + right is same
-        height = self.screen.height - (self.bounding_box[1]*2)
-        self.camera_box = pygame.Rect(left, top, width, height)
-
-    def box_camera(self, target):
-        if target.is_moving():
-            if target.rect.left < self.camera_box.left:
-                self.camera_box.left = target.rect.left
-            if target.rect.right > self.camera_box.right:
-                self.camera_box.right = target.rect.right
-            if target.rect.top < self.camera_box.top:
-                self.camera_box.top = target.rect.top
-            if target.rect.bottom > self.camera_box.bottom:
-                self.camera_box.bottom = target.rect.bottom
-        
-        self.offset.x = self.camera_box.left - self.bounding_box[0]
-        self.offset.y = self.camera_box.top  - self.bounding_box[1]
-
-        return (self.offset.x, self.offset.y)
-
-    def center_camera(self, player):
-            self.offset.x = lerp_single(self.offset.x, player.rect.centerx - self.screen.width/2,  0.007)
-            self.offset.y = lerp_single(self.offset.y, player.rect.centery - self.screen.height/2, 0.007)
-            self.camera_box.centerx = player.rect.centerx
-            self.camera_box.centery = player.rect.centery
+        self.leftbox  = pygame.FRect(0, 0, self.screen.width/3, self.screen.height)
+        self.rightbox = pygame.FRect(self.screen.width - self.screen.width/3, 0, self.screen.width/3, self.screen.height)
 
     def custom_draw(self, player):
-        self.center_camera(player)
+        self.offset.x = player.rect.centerx - self.screen.width/2
+        self.offset.y = player.rect.centery - self.screen.height/2
 
         for sprite in self.sprites():
-            offset_rect = sprite.rect.topleft - self.offset
+            offset_rect = sprite.rect.copy()
+            offset_rect.center -= self.offset
             self.screen.blit(sprite.image, offset_rect)
+
+        pygame.draw.rect(self.screen, (120,20,20), self.leftbox)
+        pygame.draw.rect(self.screen, (120,20,20), self.rightbox)
