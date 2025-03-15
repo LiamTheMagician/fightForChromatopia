@@ -43,23 +43,28 @@ class Game():
     def change_status(self):
         ...
 
-    def fps(self, dt):
-        self.i -= 1*dt
-        if self.i <= 0:
-            print(1/dt)
-            self.i = 0.5
+    # def fps(self, dt):
+    #     self.i -= 1*dt
+    #     if self.i <= 0:
+    #         print(1/dt)
+    #         self.i = 0.5
 
     def run_game(self):
         dt = framerate.time() - self.prev_time
         self.prev_time = framerate.time()
 
-        screen.fill((67, 171, 230))
+        self.timestep = min(1/120, dt)
+        for i in range(int(round(dt/self.timestep))):
+            screen.fill((67, 171, 230))
 
-        self.check_events()
-        self.fps(dt)
-        self.level.level_run(dt)
+            self.check_events()
+            self.level.level_run(self.timestep)
 
-        pygame.display.flip()
+            print(self.timestep)
+
+            pygame.display.flip()
+
+        
 
 main_game = Game("map/map1.csv", 400)
 main_menu = Menu("art/wallpaper.png", main_menu_buttons)
