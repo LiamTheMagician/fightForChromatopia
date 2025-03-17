@@ -1,8 +1,12 @@
 import pygame
 from pygame.locals import *
+from text import *
+
+pygame.joystick.init()
+joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, speed, pos, collision_list, screen):
+    def __init__(self, speed, pos, collision_list, npc_list, screen):
         super().__init__()
         # Player Parameters
         self.image = pygame.image.load('art/player.png').convert_alpha()
@@ -12,6 +16,9 @@ class Player(pygame.sprite.Sprite):
         self.acceleration = speed
         self.direction    = pygame.math.Vector2(0, 0)
 
+        #Controller set-up
+        self.joy_key = [0, 0]
+        
         # Constants
         self.HORIZONTAL = "horizontal"
         self.VERTICAL   = "vertical"
@@ -19,32 +26,48 @@ class Player(pygame.sprite.Sprite):
 
         # Collisions
         self.collision_list = collision_list
-
+        
+        #Interactions
+        self.npc_list = npc_list
         # Display
         self.screen = screen
 
     def movement(self, dt):
-        keys = pygame.key.get_pressed()
-        self.alignement = self.EMPTY
+        self.keys = pygame.key.get_pressed()
 
+        self.alignement = self.EMPTY
         self.direction.xy = (0, 0)
 
-        if keys[K_LEFT]:
+        if (self.keys[K_q] and not self.keys[K_d]):
             self.direction.x = -1
             self.alignement = self.HORIZONTAL
-        elif keys[K_RIGHT]:
+        elif self.keys[K_d] and not self.keys[K_q]:
             self.direction.x = 1
             self.alignement = self.HORIZONTAL
 
-        if keys[K_UP]:
+        if self.keys[K_z] and not self.keys[K_s]:
             self.direction.y = -1
             self.alignement = self.VERTICAL
-        elif keys[K_DOWN]:
+        elif self.keys[K_s] and not self.keys[K_z]:
             self.direction.y = 1
             self.alignement = self.VERTICAL
 
-        if self.direction.length_squared() > 0:
-            self.direction = self.direction.normalize()
+        if len(joysticks) == 0:
+            if self.direction.length_squared() > 0:
+                self.direction = self.direction.normalize()
+
+        for i in range(len(joysticks)):
+            if joysticks[i].get_init():
+                self.joy_key[0] = round(joysticks[i].get_axis(0),1)
+                self.joy_key[1] = round(joysticks[i].get_axis(1),1)
+
+                self.direction.x = self.joy_key[0]
+                self.direction.y = self.joy_key[1]
+                if self.direction.length_squared() >= 0.25:
+                    self.direction = self.direction.normalize()
+            else:
+                if self.direction.length_squared() > 0:
+                    self.direction = self.direction.normalize()
 
         self.vel = self.direction * self.acceleration * dt
 
@@ -55,6 +78,11 @@ class Player(pygame.sprite.Sprite):
         self.pos.y += self.vel.y
         self.rect.y = round(self.pos.y)
         self.collisions(self.VERTICAL)
+
+    def is_moving(self):
+        if self.direction == (0,0):
+            return False
+        return True
 
     def collisions(self, alignement):
         if alignement == self.HORIZONTAL:
@@ -76,9 +104,16 @@ class Player(pygame.sprite.Sprite):
                         self.rect.top = sprite.rect.bottom
                     self.pos.y = self.rect.y
                     self.vel.y = 0
+    
+    def interaction(self, liste_npc):
+        for i in range(len(liste_npc)):
+            if distance(self.rect.center, liste_npc[i].rect.center) <= 200:
+                print('feur')
 
     def player_debug(self):
-        print(f"Pos: {self.pos}, Vel: {self.vel}, Dir: {self.direction}")
+        text_debug = f"DirX: {self.direction.x}\nDirY: {self.direction.y}"
+        text(text_debug, (255,255,255), (0,0))
 
     def update(self, dt):
         self.movement(dt)
+        self.interaction(self.npc_list)

@@ -1,58 +1,91 @@
 import pygame
 import time as framerate
+import sys
 from level import *
 from menu import *
 from menu_items import *
+
 
 screen = pygame.display.set_mode((720,480))
 
 game_run = False
 menu_run = True
-level_2_run = False
 
 main_menu_buttons = [
-    Button(position=(720/2, 480/2), size=(200, 50))
+    Button('Play', font_size= 30,position=(720/2, 480/2), size=(200, 50))
 ]
 
 class Game():
-    def __init__(self, chemin_niveau):
+    def __init__(self, level_path, player_speed):
         pygame.init()
-        self.prev_time = framerate.time()
+        
+        self.player_speed = player_speed
+        self.level = Level(level_path)
+        self.level.tile_mapping(self.player_speed)
 
-        self.level = Level(chemin_niveau)
-        self.level.tile_mapping(300)
+        self.prev_time = framerate.time()
+        self.i = 1
+
+    def change_level(self, level_path):
+        self.level = Level(level_path)
+        self.level.tile_mapping(self.player_speed)
+
+    def check_events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
+    def check_status(self):
+        keys = pygame.key.get_pressed()
+        if keys[K_ESCAPE]:
+            return False
+        return True
+    
+    def change_status(self):
+        ...
+
+    def fps(self, dt):
+        self.i -= 1*dt
+        if self.i <= 0:
+            print(1/dt)
+            self.i = 0.5
 
     def run_game(self):
         dt = framerate.time() - self.prev_time
         self.prev_time = framerate.time()
 
-        #Events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-        
-        screen.fill((50,50,50))
+        screen.fill((67, 171, 230))
 
+        self.check_events()
+        self.fps(dt)
         self.level.level_run(dt)
+
         pygame.display.flip()
 
-main_game = Game("map/map1.csv")
+main_game = Game("map/map1.csv", 400)
 main_menu = Menu("art/wallpaper.png", main_menu_buttons)
-level_2 = Game("map/map2.csv")
+level_2 = "map/map2.csv"
 
-while True:
-    print(menu_run)
-    if game_run:
+running = True
+while running:
+    if game_run and menu_run == False:
         main_game.run_game()
-        for event in pygame.event.get():
-            if event.type == KEYDOWN and level_2 == False:
-                if event.key == K_m:
-                    level_2 = True
-                    game_run = False
+
+        game_run = main_game.check_status()
+        menu_run = not main_game.check_status() #not inverses le bool
+
     if menu_run and game_run == False:
         main_menu.run_menu()
+
         if main_menu.get_button(0) and game_run == False:
-            game_run = True
             menu_run = False
-    if level_2_run:
-        level_2.run_game()
+            game_run = True
+
+    for event in pygame.event.get():
+        if event.type==KEYDOWN:
+                if event.key==K_m:
+                    main_game.change_level(level_2)
+                    print("feur")
+    if not game_run and not menu_run:
+        pygame.quit()
+        sys.exit()

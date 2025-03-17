@@ -4,16 +4,23 @@ from level     import *
 import time as framerate
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, init_color = (120,120,120), hover_color = (0,0,0), click_color = (255,255,255), position = (0,0), size = (50,50)):
+    def __init__(self, text = 'Stupid shit', text_color = (0,0,0), font_size = 50, init_color = (120,120,120), hover_color = (0,0,0), click_color = (255,255,255), position = (0,0), size = (50,50)):
         super().__init__()
-
+        pygame.font.init()
+        
         self.screen = pygame.display.get_surface()
         self.prev_time = framerate.time()
 
         self.image = pygame.Surface(size)
         self.rect  = self.image.get_rect(center=position)
         
-        self.delay   = 0.2
+        self.font = pygame.font.SysFont('Comic Sans MS', font_size)
+        self.text = text
+        self.text_color = text_color
+        self.text_surface = self.font.render(text, True, text_color)
+        self.text_rect = self.text_surface.get_rect(center=self.rect.center)
+
+        self.delay   = 0.5
         self.clicked = False
 
         self.init_color  = init_color
@@ -24,25 +31,29 @@ class Button(pygame.sprite.Sprite):
         click = pygame.mouse.get_pressed(3)
 
         self.image.fill(self.init_color)
+        
         if click[0]:
             if self.rect.collidepoint(pygame.mouse.get_pos()):
                 self.image.fill(self.click_color)
-                self.delay = 0.5
+
+        if click[0] and self.delay <= 0.0:
+            if self.rect.collidepoint(pygame.mouse.get_pos()):
+                self.image.fill(self.click_color)
                 self.clicked = True
 
         elif not click[0]:
             if self.rect.collidepoint(pygame.mouse.get_pos()):
                 self.image.fill(self.hover_color)
         
-        if self.delay > 0.0:
+        if self.delay >= 0.0:
             self.delay -= 1*dt
 
-        elif self.delay == 0.0 and self.clicked:
-            self.delay = 0.5
-            self.clicked = False
+        self.image.blit(self.text_surface, self.text_surface.get_rect(center=(self.image.get_width() // 2, self.image.get_height() // 2)))
 
     def get_clicked(self):
         if self.clicked:
+            self.clicked = False
+            self.delay = 0.5
             return True
         return False
             
