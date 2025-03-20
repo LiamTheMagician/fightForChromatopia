@@ -5,7 +5,6 @@ from level import *
 from menu import *
 from menu_items import *
 
-
 screen = pygame.display.set_mode((720,480))
 
 game_run = False
