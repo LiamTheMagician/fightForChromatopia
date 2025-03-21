@@ -1,63 +1,63 @@
 import pygame
 from pygame.locals import *
-from text import *
+from texte import *
 
 pygame.joystick.init()
-joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
+manettes = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, speed, pos, collision_list, screen):
+class Joueur(pygame.sprite.Sprite):
+    def __init__(self, vitesse, pos, liste_collision, ecran):
         super().__init__()
         # Player Parameters
-        self.image = pygame.image.load('art/player.png').convert_alpha()
+        self.image = pygame.image.load('art/joueur.png').convert_alpha()
         self.rect  = self.image.get_frect(topleft=pos)
         self.pos   = pygame.math.Vector2(self.rect.topleft)
-        self.vel   = pygame.math.Vector2(0, 0)
-        self.acceleration = speed
+        self.velocite   = pygame.math.Vector2(0, 0)
+        self.acceleration = vitesse
         self.direction    = pygame.math.Vector2(0, 0)
 
-        #Controller set-up
+        # Controller set-up
         self.joy_key = [0, 0]
         
         # Constants
         self.HORIZONTAL = "horizontal"
         self.VERTICAL   = "vertical"
-        self.EMPTY      = ""
+        self.VIDE      = ""
 
         # Collisions
-        self.collision_list = collision_list
+        self.liste_collision = liste_collision
 
         # Display
-        self.screen = screen
+        self.ecran = ecran
 
-    def movement(self, dt):
-        self.keys = pygame.key.get_pressed()
+    def mouvement(self, dt):
+        self.touches = pygame.key.get_pressed()
 
-        self.alignement = self.EMPTY
+        self.alignement = self.VIDE
         self.direction.xy = (0, 0)
 
-        if (self.keys[K_LEFT] and not self.keys[K_RIGHT]):
+        if (self.touches[K_LEFT] and not self.touches[K_RIGHT]):
             self.direction.x = -1
             self.alignement = self.HORIZONTAL
-        elif self.keys[K_RIGHT] and not self.keys[K_LEFT]:
+        elif self.touches[K_RIGHT] and not self.touches[K_LEFT]:
             self.direction.x = 1
             self.alignement = self.HORIZONTAL
 
-        if self.keys[K_UP] and not self.keys[K_DOWN]:
+        if self.touches[K_UP] and not self.touches[K_DOWN]:
             self.direction.y = -1
             self.alignement = self.VERTICAL
-        elif self.keys[K_DOWN] and not self.keys[K_UP]:
+        elif self.touches[K_DOWN] and not self.touches[K_UP]:
             self.direction.y = 1
             self.alignement = self.VERTICAL
 
-        if len(joysticks) == 0:
+        if len(manettes) == 0:
             if self.direction.length_squared() > 0:
                 self.direction = self.direction.normalize()
 
-        for i in range(len(joysticks)):
-            if joysticks[i].get_init():
-                self.joy_key[0] = round(joysticks[i].get_axis(0),1)
-                self.joy_key[1] = round(joysticks[i].get_axis(1),1)
+        for i in range(len(manettes)):
+            if manettes[i].get_init():
+                self.joy_key[0] = round(manettes[i].get_axis(0),1)
+                self.joy_key[1] = round(manettes[i].get_axis(1),1)
 
                 self.direction.x = self.joy_key[0]
                 self.direction.y = self.joy_key[1]
@@ -67,46 +67,46 @@ class Player(pygame.sprite.Sprite):
                 if self.direction.length_squared() > 0:
                     self.direction = self.direction.normalize()
 
-        self.vel = self.direction * self.acceleration * dt
+        self.velocite = self.direction * self.acceleration * dt
 
-        self.pos.x += self.vel.x
+        self.pos.x += self.velocite.x
         self.rect.x = round(self.pos.x)
         self.collisions(self.HORIZONTAL)
 
-        self.pos.y += self.vel.y
+        self.pos.y += self.velocite.y
         self.rect.y = round(self.pos.y)
         self.collisions(self.VERTICAL)
 
-    def is_moving(self):
+    def bouge(self):
         if self.direction == (0,0):
             return False
         return True
 
     def collisions(self, alignement):
         if alignement == self.HORIZONTAL:
-            for sprite in self.collision_list:
+            for sprite in self.liste_collision:
                 if sprite.rect.colliderect(self.rect):
                     if self.direction.x > 0:
                         self.rect.right = sprite.rect.left
                     elif self.direction.x < 0:
                         self.rect.left = sprite.rect.right
                     self.pos.x = self.rect.x
-                    self.vel.x = 0
+                    self.velocite.x = 0
         
         if alignement == self.VERTICAL:
-            for sprite in self.collision_list:
+            for sprite in self.liste_collision:
                 if sprite.rect.colliderect(self.rect):
                     if self.direction.y > 0:
                         self.rect.bottom = sprite.rect.top
                     elif self.direction.y < 0:
                         self.rect.top = sprite.rect.bottom
                     self.pos.y = self.rect.y
-                    self.vel.y = 0
+                    self.velocite.y = 0
 
-    def player_debug(self):
-        text_debug = f"DirX: {self.direction.x}\nDirY: {self.direction.y}"
-        text(text_debug, (255,255,255), (0,0))
+    def debug_joueur(self):
+        debug_texte = f"DirX: {self.direction.x}\nDirY: {self.direction.y}"
+        texte(debug_texte, (255,255,255), (0,0))
 
     def update(self, dt):
-        self.movement(dt)
+        self.mouvement(dt)
 

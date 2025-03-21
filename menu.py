@@ -2,43 +2,51 @@ import pygame
 import math
 import time as framerate
 from pygame.locals import *
-from game_math     import *
-from text          import *
-from menu_items    import Background
+from math_jeu     import *
+from texte          import *
+from elt_menu    import Background
 
 class Menu():
-    def __init__(self, image_path = 'art/wallpaper.png', button_list = []):
+    def __init__(self, chemins_image = 'art/fond.png', liste_bouton = []):
         pygame.init()
         pygame.font.init()
-        self.screen = pygame.display.get_surface()
+        self.ecran = pygame.display.get_surface()
 
-        self.wallpaper = Background((0,0), image_path)
-        self.button_list   = button_list
+        self.fond = Background((0,0), chemins_image)
+        self.liste_bouton   = liste_bouton
 
-        self.g_wallpaper = pygame.sprite.Group(self.wallpaper)
-        self.g_buttons   = pygame.sprite.Group(self.button_list)
+        self.g_fond    = pygame.sprite.Group(self.fond)
+        self.g_boutons = pygame.sprite.Group(self.liste_bouton)
 
-        self.prev_time = framerate.time()
+        self.i = 0.5
+        self.temps_precedent = framerate.time()
 
-    def get_button(self, button_index):
-        if self.g_buttons.sprites()[button_index].get_clicked():
+    def get_bouton(self, index_bouton):
+        if self.g_boutons.sprites()[index_bouton].get_clicked():
             return True
         return False
 
-    def run_menu(self):
-        dt = framerate.time() - self.prev_time
-        self.prev_time = framerate.time()
+    def fps(self, dt):
+        self.i -= 1*dt
+        if self.i <= 0:
+            print(1/dt)
+            self.i = 0.5
+
+    def lancer_menu(self):
+        dt = framerate.time() - self.temps_precedent
+        self.temps_precedent = framerate.time()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
 
-        self.screen.fill((50,50,50))
+        self.ecran.fill((50,50,50))
+        self.fps(dt)
 
-        self.g_buttons.update(dt)
-        self.g_wallpaper.update(True)
+        self.g_boutons.update(dt)
+        self.g_fond.update(True)
        
-        self.g_wallpaper.draw(self.screen)
-        self.g_buttons.draw(self.screen)
+        self.g_fond.draw(self.ecran)
+        self.g_boutons.draw(self.ecran)
 
         pygame.display.flip()

@@ -1,14 +1,14 @@
-def lerp_single(a: int, b:int , t: float) -> float:
-    """lerp_single(a, b, t)\n
+def lerp(a: int, b:int , t: float) -> float:
+    """lerp(a, b, t)\n
     a: position de départ\n
     b: position d'arrivée\n
     t: valeur entre 0 et 1\n
     
-    lerp_single single renvoie une valeur entre a et b en fonction de t"""
+    lerp renvoie une valeur entre a et b en fonction de t"""
     return a + (b - a) * t
 
-def normalize(x: float, min_value: float, max_value: float, min_range: float = 0.0, max_range: float = 1.0):
-    """normalize(a, b, t)
+def normaliser(x: float, min_value: float, max_value: float, min_range: float = 0.0, max_range: float = 1.0):
+    """normaliser(a, b, t)
     x: valeur à normaliser
     min_value: valeur minimale possible
     max_value: valeur maximale possible
@@ -19,7 +19,7 @@ def normalize(x: float, min_value: float, max_value: float, min_range: float = 0
     else:
         return ((x - min_value) / (max_value - min_value)) * (max_range - min_range) + min_range
 
-def example(rect):
+def exemple(rect):
     """
     en gros ici si tu veux partir d'un point A à un point B sans osciller entre les deux tu fais ça:
     1) tu trouves l'id de l'image du temps actuelle (donc 500 si c'est la 500e image créée par le programme)
@@ -29,8 +29,8 @@ def example(rect):
     import math
     import pygame
     current_time = pygame.time.get_ticks()
-    t = normalize(math.sin(current_time / 100), -1, 1)
-    rect.x = lerp_single(rect.x, 400, 0.1)
+    t = normaliser(math.sin(current_time / 100), -1, 1)
+    rect.x = lerp(rect.x, 400, 0.1)
 
 def distance(pos1 = (0,0), pos2 = (0,0)):
     from math import sqrt

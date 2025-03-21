@@ -1,6 +1,6 @@
 import pygame
-from game_math import *
-from level     import *
+from math_jeu import *
+from niveau     import *
 import time as framerate
 
 class Button(pygame.sprite.Sprite):
@@ -11,13 +11,13 @@ class Button(pygame.sprite.Sprite):
         self.screen = pygame.display.get_surface()
         self.prev_time = framerate.time()
 
-        self.image = pygame.Surface(size)
+        self.image = pygame.Surface(size).convert_alpha()
         self.rect  = self.image.get_rect(center=position)
         
         self.font = pygame.font.SysFont('Comic Sans MS', font_size)
         self.text = text
         self.text_color = text_color
-        self.text_surface = self.font.render(text, True, text_color)
+        self.text_surface = self.font.render(text, True, text_color).convert_alpha()
         self.text_rect = self.text_surface.get_rect(center=self.rect.center)
 
         self.delay   = 0.5
@@ -63,13 +63,13 @@ class Button(pygame.sprite.Sprite):
 class Background(pygame.sprite.Sprite):
     def __init__(self, position, image_path):
         super().__init__()
-        self.image = pygame.image.load(image_path)
+        self.image = pygame.image.load(image_path).convert_alpha()
         self.rect = self.image.get_rect(center=position)
         self.screen = pygame.display.get_surface()
 
     def parallax(self):
-        mouse_x = normalize(pygame.mouse.get_pos()[0], 0, self.screen.width,  0.48, 0.52)
-        mouse_y = normalize(pygame.mouse.get_pos()[1], 0, self.screen.height, 0.48, 0.52)
+        mouse_x = normaliser(pygame.mouse.get_pos()[0], 0, self.screen.width,  0.48, 0.52)
+        mouse_y = normaliser(pygame.mouse.get_pos()[1], 0, self.screen.height, 0.48, 0.52)
 
         self.rect.centerx = -mouse_x * self.screen.width + self.screen.width
         self.rect.centery = -mouse_y * self.screen.height + self.screen.height
